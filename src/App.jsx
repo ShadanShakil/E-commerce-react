@@ -6,6 +6,8 @@ import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import Category from './pages/Category'
 import CategoryFilter from './pages/CategoryFilter'
+import SigninPage from './pages/SigninPage'
+import SignupPage from './pages/SignupPage'
 
 function App() {
 
@@ -18,9 +20,11 @@ function App() {
       <Route path='/products/:id' element={<ProductDetails />}/>
       <Route path='/categories' element={<Category />}/>
       <Route path='/categoryfilter/:slug' element={<CategoryFilter/>}/>
+      <Route path='/signin' element={<SigninPage/>}/>
+      <Route path='/signup' element={<SignupPage/>}/>
       <Route  path='*' element={<div>404 Not Found</div>}/>
     </Routes>
-    </BrowserRouter>
+    </BrowserRouter>  
   )
 }
 

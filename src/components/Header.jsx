@@ -10,9 +10,23 @@ import {
   DropdownMenu,
   Avatar,
 } from "@nextui-org/react";
-import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import {UserContext} from "../context/UserContext"
+import { signOut } from "firebase/auth";
+import { auth } from "../utils/firebaseconfig";
 
 function Header() {
+
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async ()=>{
+    await signOut(auth);
+  }
+
+
+
   return (
     <Navbar>
       <NavbarBrand>
@@ -41,7 +55,9 @@ function Header() {
           </NavLink>
         </NavbarItem>
       </NavbarContent>
-
+      {
+        user.isLogin ? (
+          <div>
       <NavbarContent as="div" justify="end">
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
@@ -52,13 +68,15 @@ function Header() {
               color="secondary"
               name="Jason Hughes"
               size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              src={
+                user.isLogin ? user.userInfo.photoUrl : "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              }
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              <p className="font-semibold">{user.userInfo.email}</p>
             </DropdownItem>
             <DropdownItem key="team_settings">
               <NavLink to={"/"} className="text-black font-semibold">
@@ -78,13 +96,28 @@ function Header() {
             <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem key="logout" color="danger" onClick={handleLogout}>
               Log Out
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
-    </Navbar>
+      </div>
+        )
+        :
+        (
+          <div className="">
+      <button onClick={
+        () => {navigate("/signin")}
+      } className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+<span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+  login
+</span>
+</button>
+      </div>
+        )
+      }
+      </Navbar>
   );
 }
 
