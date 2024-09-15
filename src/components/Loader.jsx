@@ -1,5 +1,5 @@
 import React from "react";
-import {CircularProgress} from "@nextui-org/react";
+import { CircularProgress } from "@nextui-org/react";
 
 function Loader() {
   const [value, setValue] = React.useState(0);
